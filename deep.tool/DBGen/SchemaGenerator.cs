@@ -106,8 +106,7 @@ namespace deep.tools.db
         public void GenerateSchema()
         {
             new SchemaExport(cfg)
-                .SetOutputFile(DateTime.Now.ToString("yy-M-d") + ".sql")
-                //.Execute(true, true, false);
+                .SetOutputFile(DateTime.Now.ToString("yy-M-d") + ".sql")        
                 .Create(true, true);
             //我们也可以使用new SchemaExport(cfg).Create(bool /*Script*/,bool/*export to DB*/)
             //它其实是Schema.Execute的简化
@@ -115,8 +114,7 @@ namespace deep.tools.db
             //{
             //    Execute(script, export, false, true);
             //}       
-        }
-
+        }      
 
         /// <summary>
         /// 由编译集生成数据库(可以指定多个编译集一次性生成) 
