@@ -28,6 +28,32 @@
 //  --------------------------------------------------------------------------------------------
 #endregion
 
+#region 使用的方法说明
+
+//new SchemaExport(cfg)
+//    .SetOutputFile("user_role_ddlScript.sql")
+//    //.Create(true,true);
+//    //.Execute(true, // write schema to output
+//    //             false, // do not export to DB
+//    //             false, // not drop statements only
+//    //             );
+//  .Execute(true, true, false);
+
+//Execute(script, export, justDrop, format) 方法说明
+//script为True就是把DDL语句输出到控制台；
+//export为True就是根据持久类和映射文件在数据库中先执行删除再执行创建操作；
+//justDrop为false表示不是仅仅执行Drop语句还执行创建操作，这个参数的不同就扩展了上面两个方法；
+
+//Execute(script, export, justDrop, connection, exportOutput)
+//前四个参数与前面相同
+//connection为自定义连接,当export为true执行语句时必须打开连接。该方法不关闭连接，null就是使用默认连接；
+//exportOutput参数自定义输出，例如我们输入到一下TextWriter中可以使用如下方式
+
+//    var export = new SchemaExport(cfg);
+//    var sb = new StringBuilder();
+//    TextWriter output = new StringWriter(sb);
+//    export.Execute(true, false, false, false, null, output);
+#endregion
 
 using System;
 using System.Collections.Generic;
@@ -44,6 +70,7 @@ namespace deep.dao.tools
     /// 实现了<see cref="IGenerateSchema"/>接口，将扩展了多编译外部加载
     /// 后生成的能力。
     /// </remarks>
+    
     public class SchemaGenerator : IGenerateSchema
     {
         private Configuration cfg = new Configuration();
@@ -54,7 +81,6 @@ namespace deep.dao.tools
         public SchemaGenerator()
         {
             cfg.Configure(System.AppDomain.CurrentDomain.BaseDirectory + "\\hibernate.cfg.xml");
-
             //cfg.Configure(Assembly.Load("NHibernateDao"), "NHibernateDao.hibernate.cfg.xml");
         }
         /// <summary>
@@ -81,25 +107,17 @@ namespace deep.dao.tools
         {
             new SchemaExport(cfg)
                 .SetOutputFile(DateTime.Now.ToString("yy-M-d") + ".sql")
-                .Execute(true, true, false);
-            //new SchemaExport(cfg)
-            //    .SetOutputFile("user_role_ddlScript.sql")
-            //    //.Create(true,true);
-            //    //.Execute(true, // write schema to output
-            //    //             false, // do not export to DB
-            //    //             false, // no drop statements
-            //    //             true// only create statements
-            //    //             );
-            //  .Execute(true, true, false);
-
+                //.Execute(true, true, false);
+                .Create(true, true);
             //我们也可以使用new SchemaExport(cfg).Create(bool /*Script*/,bool/*export to DB*/)
             //它其实是Schema.Execute的简化
             //public void Create(bool script, bool export)
             //{
             //    Execute(script, export, false, true);
-            //}            
-            //new SchemaExport(cfg).Execute(false, true, false);                      
+            //}       
         }
+
+
         /// <summary>
         /// 由编译集生成数据库(可以指定多个编译集一次性生成) 
         /// </summary>
@@ -124,9 +142,11 @@ namespace deep.dao.tools
         #region 更新数据库
         public void UpdateSchema()
         {
-            new SchemaExport(cfg)
-                .SetOutputFile(DateTime.Now.ToString("yy-M-d") +  ".sql")
-                .Execute(true,true,false);
+            new SchemaUpdate(cfg)
+                .Execute(true, true);
+            //new SchemaExport(cfg)
+            //    .SetOutputFile(DateTime.Now.ToString("yy-M-d") + ".sql")
+            //    .Execute(true, false, false);
         }
         #endregion
 
@@ -143,7 +163,7 @@ namespace deep.dao.tools
         public void GenerateSQLFile()
         {
             new SchemaExport(cfg)
-               .SetOutputFile(DateTime.Now.ToShortDateString() + ".sql")
+               .SetOutputFile(DateTime.Now.ToString("yy-M-d")+ ".sql")
                .Execute(true, false, false);
         }
 
