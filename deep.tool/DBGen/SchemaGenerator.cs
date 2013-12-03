@@ -61,7 +61,7 @@ using System.Reflection;
 using System.Text;
 using NHibernate.Cfg;
 using NHibernate.Tool.hbm2ddl;
-namespace deep.dao.tools
+namespace deep.tools.db
 {
     /// <summary>
     /// 数据库表结构操作类

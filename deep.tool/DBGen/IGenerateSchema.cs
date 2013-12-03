@@ -38,7 +38,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace deep.dao.tools
+namespace deep.tools.db
 {
     /// <summary>
     /// 定义数据库生成接口
